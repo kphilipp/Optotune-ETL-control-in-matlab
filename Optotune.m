@@ -103,7 +103,7 @@ classdef Optotune < handle
             %% Set current %%%%%%%%
             set_i = (floor(ci*(lens.max_bin+1) / lens.max_current));
             LB = mod(set_i,256); %% low byte
-            HB = abs(set_i-LB)/256; %% high byte
+            HB = mod((set_i-LB)/256,256); %% high byte
             command = append_crc(['Aw'-0 HB LB]);
             fwrite(lens.etl_port, command);
             %pause(lens.time_pause);
@@ -113,7 +113,7 @@ classdef Optotune < handle
         function setRefractivePower(lens, fp) %fp - focal power in dpt
             set_fp = floor((fp+5)*200);
             LB = mod(set_fp,256); %% low byte
-            HB = abs(set_fp-LB)/256; %% high byte
+            HB = mod((set_fp-LB)/256,256); %% high byte
             command = append_crc(['PwDA'-0 HB LB 'YY'-0]);
             fwrite(lens.etl_port, command);
         end
